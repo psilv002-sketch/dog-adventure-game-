@@ -1,0 +1,20 @@
+# Netlify Configuration File
+
+[build]
+  # No build command needed for this static site
+  publish = "."
+  functions = "netlify/functions"
+
+# Redirect rules (optional - for cleaner URLs)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Environment hint for local development
+[dev]
+  functions = "netlify/functions"
+  publish = "."
+  port = 8888
+

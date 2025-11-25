@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Puzzle Adventure - Play with Your Dog!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Welcome/Upload Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="container">
+            <h1>Welcome to the Dog Companion Adventure!</h1>
+            <h2 class="welcome-text">Introduce us to your companion</h2>
+            
+            <div class="form-group">
+                <label for="dog-name-welcome">What's their name?</label>
+                <input type="text" id="dog-name-welcome" name="dogNameWelcome" required placeholder="e.g., Max, Luna, Buddy">
+            </div>
+            
+            <div class="upload-area" id="upload-area">
+                <div class="upload-icon">📸</div>
+                <div class="upload-text">Click or drag to upload an image of your dog</div>
+                <div class="upload-hint">Supports JPG, PNG, and WebP formats</div>
+                <input type="file" id="dog-photo-input" accept="image/*" style="display: none;">
+            </div>
+            
+            <div id="image-preview-container" style="display: none;">
+                <div class="image-editor-container">
+                    <div class="oval-frame-container">
+                        <canvas id="image-canvas"></canvas>
+                        <div class="oval-mask"></div>
+                    </div>
+                    <div class="image-controls">
+                        <div class="control-group">
+                            <label for="scale-slider">Scale: <span id="scale-value">100%</span></label>
+                            <input type="range" id="scale-slider" min="10" max="200" value="100" step="1">
+                        </div>
+                        <p class="drag-hint">💡 Drag the image to position it within the oval</p>
+                        <button id="change-photo-btn" class="btn-secondary small">🔄 Change Photo</button>
+                    </div>
+                </div>
+                <button id="continue-btn" class="btn-primary">Tell us about them!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Questionnaire Screen -->
+    <div id="questionnaire-screen" class="screen">
+        <div class="container">
+            <div id="dog-photo-display" class="dog-photo-display">
+                <img id="dog-photo-img" alt="Your dog" class="dog-photo">
+            </div>
+            <h1 id="questionnaire-title">Nice to meet you <span id="dog-name-title"></span>!</h1>
+            <p class="subtitle">Tell us more about <span id="dog-name-questionnaire"></span> so we can create the perfect adventure!</p>
+            
+            <form id="dog-questionnaire">
+                <div class="form-group">
+                    <label for="dog-gender">Is <span id="dog-name-gender-label"></span> a...?</label>
+                    <select id="dog-gender" name="dogGender" required>
+                        <option value="">Select...</option>
+                        <option value="boy">Boy</option>
+                        <option value="girl">Girl</option>
+                        <option value="who-cares">Who cares!</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="dog-breed">What breed is <span id="dog-name-breed-label"></span>?</label>
+                    <input type="text" id="dog-breed" name="dogBreed" required placeholder="e.g., Golden Retriever, Mixed, Beagle">
+                </div>
+
+                <div class="form-group">
+                    <label for="dog-personality">What are <span id="dog-name-personality-label"></span>'s main personality traits? (Select up to 3)</label>
+                    <div class="checkbox-group" id="personality-checkboxes">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="dogPersonality" value="playful">
+                            <span>Playful - Loves games and fun</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="dogPersonality" value="curious">
+                            <span>Curious - Always exploring and investigating</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="dogPersonality" value="loyal">
+                            <span>Loyal - Protective and devoted</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="dogPersonality" value="independent">
+                            <span>Independent - Likes to do things their way</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="dogPersonality" value="friendly">
+                            <span>Friendly - Loves meeting new friends</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="dogPersonality" value="calm">
+                            <span>Calm - Relaxed and easy-going</span>
+                        </label>
+                    </div>
+                    <div id="personality-error" class="error-message" style="display: none; color: #dc3545; font-size: 0.9em; margin-top: 5px;">Please select at least 1 trait, but no more than 3.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dog-energy">How energetic is <span id="dog-name-energy-label"></span>?</label>
+                    <select id="dog-energy" name="dogEnergy" required>
+                        <option value="">Select energy level</option>
+                        <option value="low">Low - Prefers to relax and take it easy</option>
+                        <option value="medium">Medium - Balanced, enjoys play and rest</option>
+                        <option value="high">High - Very active, always ready to play!</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="dog-favorite-activity">What's <span id="dog-name-activity-label"></span>'s favorite activity?</label>
+                    <select id="dog-favorite-activity" name="dogFavoriteActivity" required>
+                        <option value="">Select favorite activity</option>
+                        <option value="fetch">Fetch - Loves chasing and retrieving</option>
+                        <option value="tug">Tug of War - Enjoys pulling games</option>
+                        <option value="treats">Treats - Food motivated!</option>
+                        <option value="exploring">Exploring - Loves sniffing and discovering</option>
+                        <option value="cuddling">Cuddling - Loves affection and pets</option>
+                        <option value="training">Training - Enjoys learning new tricks</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="dog-behavior">How does <span id="dog-name-behavior-label"></span> react to new situations?</label>
+                    <select id="dog-behavior" name="dogBehavior" required>
+                        <option value="">Select behavior</option>
+                        <option value="excited">Excited - Jumps right in!</option>
+                        <option value="cautious">Cautious - Observes first, then acts</option>
+                        <option value="confident">Confident - Takes charge immediately</option>
+                        <option value="nervous">Nervous - Needs encouragement</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary">Start Adventure! 🎮</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <div class="game-container">
+            <div class="game-header">
+                <div class="dog-info">
+                    <h2 id="dog-name-display"></h2>
+                    <p id="dog-breed-display"></p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <span class="stat-label">Chapter:</span>
+                        <span id="chapter-count" class="stat-value">1 of 5</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Decisions:</span>
+                        <span id="decision-count" class="stat-value">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-area">
+                <div class="dog-character" id="dog-character">
+                    <div class="dog-photo-game" id="dog-photo-game">
+                        <img id="dog-photo-game-img" alt="Your dog" class="dog-photo-oval">
+                    </div>
+                    <div class="dog-speech" id="dog-speech"></div>
+                </div>
+
+                <div class="puzzle-area" id="story-area">
+                    <div id="story-content" class="story-content"></div>
+                    <div id="loading-indicator" class="loading-indicator" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Creating your adventure...</p>
+                    </div>
+                    <div id="story-choices" class="story-choices"></div>
+                </div>
+            </div>
+
+            <div class="game-controls">
+                <button id="restart-btn" class="btn-secondary">Start Over</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

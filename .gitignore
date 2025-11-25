@@ -1,0 +1,21 @@
+# Netlify
+.netlify/
+
+# Environment variables
+.env
+.env.local
+
+# Node modules (if you add any dependencies later)
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# Local Netlify CLI
+.netlify
+
