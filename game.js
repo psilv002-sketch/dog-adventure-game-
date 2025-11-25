@@ -706,9 +706,9 @@ function showError(message) {
 
 // Dog speaks a reaction based on personality
 function speakReaction() {
-    const primaryPersonality = Array.isArray(dogData.personality) ? dogData.personality[0] : dogData.personality;
+        const primaryPersonality = Array.isArray(dogData.personality) ? dogData.personality[0] : dogData.personality;
     
-    const reactions = {
+        const reactions = {
         playful: ["This is exciting!", "Woof! What's next?", "I love this adventure!", "Let's keep going!"],
         curious: ["Interesting choice!", "I wonder what will happen?", "Let's see where this leads!", "Fascinating!"],
         loyal: ["I'm with you!", "Let's do this together!", "I trust your choice!", "We've got this!"],
@@ -852,8 +852,7 @@ async function shareToGallery() {
 }
 
 function updateStats() {
-    document.getElementById('chapter-count').textContent = `${chapterCount} of ${MAX_CHAPTERS}`;
-    document.getElementById('decision-count').textContent = decisionCount;
+    document.getElementById('chapter-count').textContent = `${chapterCount} of 3`;
 }
 
 function speak(text) {
