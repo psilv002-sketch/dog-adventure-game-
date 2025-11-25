@@ -6,7 +6,7 @@ let editedDogPhoto = null; // Store edited/cropped photo
 let storyHistory = []; // Store the story progression
 let chapterCount = 1;
 let decisionCount = 0;
-const MAX_CHAPTERS = 5; // Adventure ends after 5 chapters
+const MAX_CHAPTERS = 3; // Adventure ends after 3 chapters
 
 // Image editing state
 let imageEditor = {
@@ -78,8 +78,8 @@ Instructions:
 3. Make ${dogData.name}'s personality, breed, and traits influence the story
 4. IMPORTANT: Keep each story segment SHORT - exactly 5-6 sentences maximum
 5. Write concisely and get to the point quickly
-6. Always end with exactly 3 choices for what ${dogData.name} does next
-7. Format choices as: "CHOICE 1: [description]", "CHOICE 2: [description]", "CHOICE 3: [description]"
+6. Always end with exactly 2 choices for what ${dogData.name} does next
+7. Format choices as: "CHOICE 1: [description]", "CHOICE 2: [description]"
 8. Make choices meaningful and reflect ${dogData.name}'s characteristics
 9. Use the pronoun "${pronouns.subject}" for ${dogData.name}
 10. Keep the tone ${dogData.energy === 'high' ? 'energetic and exciting' : dogData.energy === 'low' ? 'calm and peaceful' : 'balanced and engaging'}`;
@@ -88,7 +88,7 @@ Instructions:
 // Generate the initial story
 async function generateInitialStory() {
     const systemPrompt = buildSystemPrompt();
-    const userPrompt = `Start ${dogData.name}'s adventure! Begin with ${dogData.name} waking up on a beautiful morning, ready for a new adventure. Reflect ${dogData.name}'s ${dogData.personality.join(' and ')} personality. Keep it SHORT - write exactly 5-6 sentences, then provide 3 choices for what ${dogData.name} does first.`;
+    const userPrompt = `Start ${dogData.name}'s adventure! Begin with ${dogData.name} waking up on a beautiful morning, ready for a new adventure. Reflect ${dogData.name}'s ${dogData.personality.join(' and ')} personality. Keep it SHORT - write exactly 5-6 sentences, then provide 2 choices for what ${dogData.name} does first.`;
     
     const messages = [
         { role: 'system', content: systemPrompt },
@@ -118,7 +118,7 @@ async function continueStory(choice, isFinalChapter = false) {
     if (isFinalChapter) {
         messages.push({ role: 'user', content: `${dogData.name} chooses: ${choice}. This is the FINAL chapter. Write a satisfying conclusion to ${dogData.name}'s adventure. Keep it SHORT - exactly 5-6 sentences maximum. End the story on a positive, uplifting note. DO NOT provide any choices - just end the story.` });
     } else {
-        messages.push({ role: 'user', content: `${dogData.name} chooses: ${choice}. Continue the adventure with what happens next. Keep it SHORT - exactly 5-6 sentences maximum, then provide 3 new choices.` });
+        messages.push({ role: 'user', content: `${dogData.name} chooses: ${choice}. Continue the adventure with what happens next. Keep it SHORT - exactly 5-6 sentences maximum, then provide 2 new choices.` });
     }
     
     const response = await callOpenAI(messages);
@@ -148,18 +148,17 @@ function parseStoryResponse(response, isFinalChapter = false) {
         };
     }
     
-    // If we couldn't parse choices, extract last 3 sentences or create defaults
+    // If we couldn't parse choices, create defaults
     if (choices.length === 0) {
         choices = [
             'Continue exploring',
-            'Rest for a moment',
-            'Try something different'
+            'Rest for a moment'
         ];
     }
     
     return {
         story: storyText.trim(),
-        choices: choices.slice(0, 3) // Ensure exactly 3 choices
+        choices: choices.slice(0, 2) // Ensure exactly 2 choices
     };
 }
 
@@ -751,7 +750,7 @@ function showAdventureSummary() {
     let summaryHTML = `
         <div class="adventure-summary">
             <h2>🎉 Adventure Complete! 🎉</h2>
-            <p class="summary-intro">${dogData.name}'s journey through ${MAX_CHAPTERS} chapters</p>
+            <p class="summary-intro">${dogData.name}'s amazing ${MAX_CHAPTERS}-chapter journey</p>
             <div class="summary-chapters">
     `;
     

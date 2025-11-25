@@ -10,7 +10,7 @@ An AI-powered interactive choose-your-own-adventure game where you upload a phot
 - **Dynamic Storytelling**: Every playthrough is different - the story adapts to your choices
 - **Personality-Based Adventures**: Your dog's traits influence the story direction and options
 - **Interactive Choices**: Make decisions that shape your dog's adventure
-- **5-Chapter Adventures**: Each adventure concludes after 5 engaging chapters
+- **3-Chapter Adventures**: Each adventure concludes after 3 engaging chapters with 2 choices each
 - **Adventure Gallery**: Share your completed adventures and browse stories from dogs around the world!
 - **Beautiful UI**: Modern, playful design with animations
 - **Responsive Design**: Works on desktop, tablet, and mobile devices

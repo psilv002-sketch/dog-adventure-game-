@@ -45,7 +45,7 @@ Click the **"+"** button to add these fields:
 | `Photo URL` | Long text | Base64 encoded photo |
 | `Chapters` | Long text | JSON string of all chapters |
 | `Date` | Date (with time) | When adventure was shared |
-| `Chapter Count` | Number | Number of chapters (5) |
+| `Chapter Count` | Number | Number of chapters (3) |
 
 **Note:** Airtable auto-creates an `ID` field - keep it!
 
