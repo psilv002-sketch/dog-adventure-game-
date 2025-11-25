@@ -588,6 +588,21 @@ select:focus {
     border-color: #667eea;
 }
 
+.complete-adventure-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: bold;
+    font-size: 1.15em;
+    border: 2px solid #667eea;
+    padding: 20px 30px;
+}
+
+.complete-adventure-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
 .personality-hint {
     font-style: italic;
     color: #667eea;
@@ -700,6 +715,77 @@ select:focus {
 
 .summary-chapters::-webkit-scrollbar-thumb:hover {
     background: #764ba2;
+}
+
+/* Location Selection Screen */
+.location-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.location-option {
+    background: white;
+    padding: 20px 25px;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.15em;
+    text-align: left;
+    color: #333;
+}
+
+.location-option:hover {
+    border-color: #667eea;
+    background: #f0f4ff;
+    transform: translateX(8px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.location-option:active {
+    transform: translateX(5px);
+}
+
+#location-dog-photo-display {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#location-screen h1 {
+    text-align: center;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+#location-screen .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+#location-screen .loading-container {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+#location-screen .loading-container p {
+    color: #667eea;
+    font-size: 1.1em;
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+#location-screen .error-message {
+    text-align: center;
+    padding: 20px;
+    background: #f8d7da;
+    border: 2px solid #dc3545;
+    border-radius: 10px;
+    color: #721c24;
+    font-size: 1.1em;
+    margin-top: 20px;
 }
 
 .game-controls {

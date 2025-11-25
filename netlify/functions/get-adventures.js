@@ -46,6 +46,7 @@ exports.handler = async (event, context) => {
             dogName: record.fields['Dog Name'],
             breed: record.fields['Breed'],
             gender: record.fields['Gender'],
+            location: record.fields['Location'] || 'Unknown location',
             photoUrl: record.fields['Photo URL'],
             chapters: JSON.parse(record.fields['Chapters'] || '[]'),
             date: record.fields['Date'],

@@ -40,8 +40,9 @@ Click the **"+"** button to add these fields:
 | Field Name | Field Type | Description |
 |------------|------------|-------------|
 | `Dog Name` | Single line text | The dog's name |
-| `Breed` | Single line text | The dog's breed |
+| `Breed` | Single line text | The dog's personality traits |
 | `Gender` | Single line text | boy/girl/who cares |
+| `Location` | Single line text | Where the adventure took place |
 | `Photo URL` | Long text | Base64 encoded photo |
 | `Chapters` | Long text | JSON string of all chapters |
 | `Date` | Date (with time) | When adventure was shared |

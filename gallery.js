@@ -87,6 +87,7 @@ function createAdventureCard(adventure) {
         <div class="card-content">
             <h3 class="dog-name">${adventure.dogName}</h3>
             <p class="dog-breed">${adventure.breed} • ${adventure.gender}</p>
+            <p class="adventure-location">📍 ${adventure.location}</p>
             <p class="adventure-preview">${preview}</p>
             <div class="card-footer">
                 <span class="chapter-badge">${adventure.chapterCount} Chapters</span>
@@ -143,6 +144,7 @@ function showFullAdventure(adventure) {
             <div class="modal-dog-info">
                 <h2>${adventure.dogName}'s Adventure</h2>
                 <p class="modal-breed">${adventure.breed} • ${adventure.gender}</p>
+                <p class="modal-location">📍 ${adventure.location}</p>
                 <p class="modal-date">Shared on ${date}</p>
             </div>
         </div>

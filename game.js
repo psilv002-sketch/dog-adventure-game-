@@ -3,10 +3,13 @@ let dogData = null;
 let dogName = null; // Store dog's name from welcome screen
 let dogPhoto = null; // Store uploaded photo
 let editedDogPhoto = null; // Store edited/cropped photo
+let selectedLocation = null; // Store the selected adventure location
 let storyHistory = []; // Store the story progression
 let chapterCount = 1;
 let decisionCount = 0;
 const MAX_CHAPTERS = 2; // Adventure ends after 2 chapters
+let preGeneratedLocations = null; // Store pre-generated locations
+let locationGenerationPromise = null; // Store the promise for location generation
 
 // Image editing state
 let imageEditor = {
@@ -66,29 +69,149 @@ function buildSystemPrompt() {
 Dog's Details:
 - Name: ${dogData.name}
 - Gender: ${dogData.gender} (use ${pronouns.subject}/${pronouns.object}/${pronouns.possessive} pronouns)
-- Breed: ${dogData.breed}
 - Personality: ${dogData.personality.join(', ')}
-- Energy Level: ${dogData.energy}
 - Favorite Activity: ${dogData.favoriteActivity}
-- Behavior in new situations: ${dogData.behavior}
 
 Instructions:
 1. Write an engaging, fun story about ${dogData.name}'s adventure
 2. Keep the story appropriate for all ages
-3. Make ${dogData.name}'s personality, breed, and traits influence the story
+3. Make ${dogData.name}'s personality and favorite activity influence the story
 4. IMPORTANT: Keep each story segment SHORT - exactly 5-6 sentences maximum
 5. Write concisely and get to the point quickly
 6. Always end with exactly 2 choices for what ${dogData.name} does next
 7. Format choices as: "CHOICE 1: [description]", "CHOICE 2: [description]"
 8. Make choices meaningful and reflect ${dogData.name}'s characteristics
 9. Use the pronoun "${pronouns.subject}" for ${dogData.name}
-10. Keep the tone ${dogData.energy === 'high' ? 'energetic and exciting' : dogData.energy === 'low' ? 'calm and peaceful' : 'balanced and engaging'}`;
+10. Keep the tone fun and engaging`;
+}
+
+// Generate location options using OpenAI (personalized based on dog's characteristics)
+async function generateLocationOptions() {
+    const pronouns = dogData.gender === 'boy' ? { subject: 'he', possessive: 'his' } :
+                     dogData.gender === 'girl' ? { subject: 'she', possessive: 'her' } :
+                     { subject: 'they', possessive: 'their' };
+    
+    const messages = [
+        { 
+            role: 'system', 
+            content: 'You are a creative assistant helping create personalized adventure locations for dogs based on their unique characteristics. Generate interesting, fun places that match the dog\'s personality and interests. Keep each location short - just the place name, no description.' 
+        },
+        { 
+            role: 'user', 
+            content: `Create 3 places where ${dogData.name}, a ${dogData.personality.join(' and ')} dog who loves ${dogData.favoriteActivity}, would want to go for an adventure. Make the locations match ${pronouns.possessive} personality and interests. Examples could include: the dog park, a hiking trail, the pet store, a friend's house, the beach, a forest path, the backyard, etc. Just provide the location names, no descriptions. Format your response as: "LOCATION 1: [place name]", "LOCATION 2: [place name]", "LOCATION 3: [place name]"` 
+        }
+    ];
+    
+    const response = await callOpenAI(messages);
+    return parseLocationResponse(response);
+}
+
+// Parse location options from AI response
+function parseLocationResponse(response) {
+    const lines = response.split('\n').filter(line => line.trim());
+    let locations = [];
+    
+    lines.forEach(line => {
+        const locationMatch = line.match(/LOCATION \d+:\s*(.+)/i);
+        if (locationMatch) {
+            // Get just the location name, trim any extra text after first sentence
+            let locationName = locationMatch[1].trim();
+            // Remove any descriptions (text after period, dash, or parenthesis)
+            locationName = locationName.split(/[.—\-\(]/)[0].trim();
+            locations.push(locationName);
+        }
+    });
+    
+    // If we couldn't parse locations, provide defaults
+    if (locations.length === 0) {
+        locations = [
+            'the local dog park',
+            'a sunny beach',
+            'a cozy pet store'
+        ];
+    }
+    
+    return locations.slice(0, 3); // Ensure exactly 3 locations
+}
+
+// Set up location selection screen
+async function setupLocationScreen() {
+    // Display dog photo
+    const locationPhotoImg = document.getElementById('location-dog-photo-img');
+    locationPhotoImg.src = dogData.photo;
+    document.getElementById('location-dog-photo-display').style.display = 'block';
+    
+    // Display dog's name
+    document.getElementById('location-dog-name').textContent = dogData.name;
+    
+    // Hide error initially
+    document.getElementById('location-error').style.display = 'none';
+    document.getElementById('location-options').innerHTML = '';
+    
+    try {
+        let locations;
+        
+        // Check if locations are already pre-generated
+        if (preGeneratedLocations) {
+            // Use pre-generated locations immediately!
+            locations = preGeneratedLocations;
+            console.log('Using pre-generated locations');
+        } else if (locationGenerationPromise) {
+            // Still generating, show loading and wait
+            document.getElementById('location-loading').style.display = 'block';
+            console.log('Waiting for location generation to complete...');
+            await locationGenerationPromise;
+            locations = preGeneratedLocations;
+            document.getElementById('location-loading').style.display = 'none';
+        } else {
+            // Not generated yet, generate now
+            document.getElementById('location-loading').style.display = 'block';
+            console.log('Generating locations now...');
+            locations = await generateLocationOptions();
+            preGeneratedLocations = locations;
+            document.getElementById('location-loading').style.display = 'none';
+        }
+        
+        // Display location options
+        displayLocationOptions(locations);
+    } catch (error) {
+        console.error('Error setting up locations:', error);
+        document.getElementById('location-loading').style.display = 'none';
+        document.getElementById('location-error').textContent = '⚠️ Failed to generate locations. Please try again.';
+        document.getElementById('location-error').style.display = 'block';
+    }
+}
+
+// Display location options as buttons
+function displayLocationOptions(locations) {
+    const container = document.getElementById('location-options');
+    container.innerHTML = '';
+    
+    locations.forEach((location, index) => {
+        const button = document.createElement('button');
+        button.className = 'location-option';
+        button.textContent = location;
+        button.addEventListener('click', () => selectLocation(location));
+        container.appendChild(button);
+    });
+}
+
+// Handle location selection
+function selectLocation(location) {
+    selectedLocation = location;
+    
+    // Switch to game screen
+    document.getElementById('location-screen').classList.remove('active');
+    document.getElementById('game-screen').classList.add('active');
+    
+    // Initialize game
+    initializeGame();
 }
 
 // Generate the initial story
 async function generateInitialStory() {
     const systemPrompt = buildSystemPrompt();
-    const userPrompt = `Start ${dogData.name}'s adventure! Begin with ${dogData.name} waking up on a beautiful morning, ready for a new adventure. Reflect ${dogData.name}'s ${dogData.personality.join(' and ')} personality. Keep it SHORT - write exactly 5-6 sentences, then provide 2 choices for what ${dogData.name} does first.`;
+    const userPrompt = `Start ${dogData.name}'s adventure at ${selectedLocation}! Begin the story with ${dogData.name} arriving at this location. Reflect ${dogData.name}'s ${dogData.personality.join(' and ')} personality. Keep it SHORT - write exactly 5-6 sentences, then provide 2 choices for what ${dogData.name} does first.`;
     
     const messages = [
         { role: 'system', content: systemPrompt },
@@ -171,6 +294,18 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', handleQuestionnaireSubmit);
     
     document.getElementById('restart-btn').addEventListener('click', restartGame);
+    
+    // Update button text when name changes
+    const nameInput = document.getElementById('dog-name-welcome');
+    if (nameInput) {
+        nameInput.addEventListener('input', () => {
+            // Only update button text if image is already uploaded
+            const previewContainer = document.getElementById('image-preview-container');
+            if (previewContainer.style.display !== 'none') {
+                updateContinueButtonText();
+            }
+        });
+    }
 });
 
 function setupPersonalityCheckboxes() {
@@ -276,11 +411,8 @@ function setupUploadScreen() {
             document.getElementById('dog-name-title').textContent = dogName;
             document.getElementById('dog-name-questionnaire').textContent = dogName;
             document.getElementById('dog-name-gender-label').textContent = dogName;
-            document.getElementById('dog-name-breed-label').textContent = dogName;
             document.getElementById('dog-name-personality-label').textContent = dogName;
-            document.getElementById('dog-name-energy-label').textContent = dogName;
             document.getElementById('dog-name-activity-label').textContent = dogName;
-            document.getElementById('dog-name-behavior-label').textContent = dogName;
         }
     });
 }
@@ -302,11 +434,28 @@ function handleFileUpload(file) {
         document.getElementById('upload-area').style.display = 'none';
         document.getElementById('image-preview-container').style.display = 'block';
         
+        // Update continue button text with dog's name if provided
+        updateContinueButtonText();
+        
         // Initialize image editor
         initializeImageEditor(dogPhoto);
     };
     reader.readAsDataURL(file);
 }
+
+// Update the continue button text dynamically
+function updateContinueButtonText() {
+    const nameInput = document.getElementById('dog-name-welcome');
+    const continueBtn = document.getElementById('continue-btn');
+    const dogNameValue = nameInput.value.trim();
+    
+    if (dogNameValue) {
+        continueBtn.textContent = `Tell us about ${dogNameValue}`;
+    } else {
+        continueBtn.textContent = 'Tell us about them';
+    }
+}
+
 
 function initializeImageEditor(imageSrc) {
     const canvas = document.getElementById('image-canvas');
@@ -494,26 +643,42 @@ function handleQuestionnaireSubmit(e) {
     dogData = {
         name: dogName, // Use the name captured on welcome screen
         gender: document.getElementById('dog-gender').value,
-        breed: document.getElementById('dog-breed').value,
-        energy: document.getElementById('dog-energy').value,
         personality: selectedPersonalities, // Now an array
         favoriteActivity: document.getElementById('dog-favorite-activity').value,
-        behavior: document.getElementById('dog-behavior').value,
         photo: getEditedPhoto() // Include the edited/cropped photo
     };
     
-    // Switch to game screen
-    document.getElementById('questionnaire-screen').classList.remove('active');
-    document.getElementById('game-screen').classList.add('active');
+    // Start generating personalized locations immediately (before showing screen)
+    startLocationGeneration();
     
-    // Initialize game
-    initializeGame();
+    // Switch to location selection screen
+    document.getElementById('questionnaire-screen').classList.remove('active');
+    document.getElementById('location-screen').classList.add('active');
+    
+    // Set up location selection screen
+    setupLocationScreen();
+}
+
+// Start generating locations in the background (after we have dogData)
+function startLocationGeneration() {
+    // Only generate if not already generated or in progress
+    if (!preGeneratedLocations && !locationGenerationPromise) {
+        locationGenerationPromise = generateLocationOptions()
+            .then(locations => {
+                preGeneratedLocations = locations;
+                console.log('Personalized locations generated:', locations);
+            })
+            .catch(error => {
+                console.error('Error generating locations:', error);
+                locationGenerationPromise = null;
+            });
+    }
 }
 
 async function initializeGame() {
     // Display dog info
     document.getElementById('dog-name-display').textContent = dogData.name;
-    document.getElementById('dog-breed-display').textContent = dogData.breed;
+    document.getElementById('dog-breed-display').textContent = `${dogData.personality.join(', ')} pup`;
     
     // Set up dog character
     setupDogCharacter();
@@ -642,15 +807,13 @@ async function handleChoice(choice, index) {
         });
         
         if (isFinalChapter) {
-            // Show final story and then summary
+            // Show final story with Complete Adventure button
             displayStory(story, []);
             speakFinalReaction();
             
-            // Show summary after a delay
-            setTimeout(() => {
-                showAdventureSummary();
-            }, 3000);
-        } else {
+            // Show Complete Adventure button
+            showCompleteAdventureButton();
+    } else {
             // Display new story segment
             displayStory(story, choices);
             
@@ -706,7 +869,7 @@ function showError(message) {
 
 // Dog speaks a reaction based on personality
 function speakReaction() {
-        const primaryPersonality = Array.isArray(dogData.personality) ? dogData.personality[0] : dogData.personality;
+    const primaryPersonality = Array.isArray(dogData.personality) ? dogData.personality[0] : dogData.personality;
     
         const reactions = {
         playful: ["This is exciting!", "Woof! What's next?", "I love this adventure!", "Let's keep going!"],
@@ -736,6 +899,22 @@ function speakFinalReaction() {
     };
     
     speak(finalReactions[primaryPersonality] || finalReactions.friendly);
+}
+
+// Show Complete Adventure button after final chapter
+function showCompleteAdventureButton() {
+    const storyChoices = document.getElementById('story-choices');
+    storyChoices.style.display = 'flex';
+    storyChoices.innerHTML = '';
+    
+    const completeButton = document.createElement('button');
+    completeButton.className = 'story-choice complete-adventure-btn';
+    completeButton.textContent = '✨ Complete Adventure';
+    completeButton.addEventListener('click', () => {
+        showAdventureSummary();
+    });
+    
+    storyChoices.appendChild(completeButton);
 }
 
 // Show adventure summary screen
@@ -802,8 +981,9 @@ async function shareToGallery() {
         // Prepare adventure data
         const adventureData = {
             dogName: dogData.name,
-            dogBreed: dogData.breed,
+            dogBreed: dogData.personality.join(', '),
             dogGender: dogData.gender,
+            dogLocation: selectedLocation,
             dogPhoto: dogData.photo,
             chapters: storyHistory.map((entry, index) => ({
                 number: index + 1,
@@ -866,6 +1046,7 @@ function speak(text) {
 
 function restartGame() {
     document.getElementById('game-screen').classList.remove('active');
+    document.getElementById('location-screen').classList.remove('active');
     document.getElementById('questionnaire-screen').classList.remove('active');
     document.getElementById('welcome-screen').classList.add('active');
     document.getElementById('dog-questionnaire').reset();
@@ -882,6 +1063,9 @@ function restartGame() {
     storyHistory = [];
     chapterCount = 1;
     decisionCount = 0;
+    selectedLocation = null;
+    preGeneratedLocations = null;
+    locationGenerationPromise = null;
     
     dogData = null;
     dogName = null;

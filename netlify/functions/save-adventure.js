@@ -23,7 +23,7 @@ exports.handler = async (event, context) => {
 
     try {
         // Parse request body
-        const { dogName, dogBreed, dogGender, dogPhoto, chapters } = JSON.parse(event.body);
+        const { dogName, dogBreed, dogGender, dogLocation, dogPhoto, chapters } = JSON.parse(event.body);
 
         // Prepare data for Airtable
         // Note: Skip photo if it's too large (base64 images can exceed Airtable's limits)
@@ -31,6 +31,7 @@ exports.handler = async (event, context) => {
             'Dog Name': dogName,
             'Breed': dogBreed,
             'Gender': dogGender,
+            'Location': dogLocation || 'Unknown',
             'Chapters': JSON.stringify(chapters),
             'Date': new Date().toISOString(),
             'Chapter Count': chapters.length

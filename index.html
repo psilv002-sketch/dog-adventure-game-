@@ -40,7 +40,7 @@
                         <button id="change-photo-btn" class="btn-secondary small">🔄 Change Photo</button>
                     </div>
                 </div>
-                <button id="continue-btn" class="btn-primary">Tell us about them!</button>
+                <button id="continue-btn" class="btn-primary">Tell us about them</button>
             </div>
             
             <div class="gallery-link-container">
@@ -67,11 +67,6 @@
                         <option value="girl">Girl</option>
                         <option value="who-cares">Who cares!</option>
                     </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="dog-breed">What breed is <span id="dog-name-breed-label"></span>?</label>
-                    <input type="text" id="dog-breed" name="dogBreed" required placeholder="e.g., Golden Retriever, Mixed, Beagle">
                 </div>
 
                 <div class="form-group">
@@ -106,16 +101,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="dog-energy">How energetic is <span id="dog-name-energy-label"></span>?</label>
-                    <select id="dog-energy" name="dogEnergy" required>
-                        <option value="">Select energy level</option>
-                        <option value="low">Low - Prefers to relax and take it easy</option>
-                        <option value="medium">Medium - Balanced, enjoys play and rest</option>
-                        <option value="high">High - Very active, always ready to play!</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
                     <label for="dog-favorite-activity">What's <span id="dog-name-activity-label"></span>'s favorite activity?</label>
                     <select id="dog-favorite-activity" name="dogFavoriteActivity" required>
                         <option value="">Select favorite activity</option>
@@ -128,19 +113,30 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="dog-behavior">How does <span id="dog-name-behavior-label"></span> react to new situations?</label>
-                    <select id="dog-behavior" name="dogBehavior" required>
-                        <option value="">Select behavior</option>
-                        <option value="excited">Excited - Jumps right in!</option>
-                        <option value="cautious">Cautious - Observes first, then acts</option>
-                        <option value="confident">Confident - Takes charge immediately</option>
-                        <option value="nervous">Nervous - Needs encouragement</option>
-                    </select>
-                </div>
-
                 <button type="submit" class="btn-primary">Start Adventure! 🎮</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Location Selection Screen -->
+    <div id="location-screen" class="screen">
+        <div class="container">
+            <div id="location-dog-photo-display" class="dog-photo-display">
+                <img id="location-dog-photo-img" alt="Your dog" class="dog-photo">
+            </div>
+            <h1>Where should <span id="location-dog-name"></span> go today?</h1>
+            <p class="subtitle">Choose an adventure destination!</p>
+            
+            <div id="location-loading" class="loading-container" style="display: none;">
+                <div class="spinner"></div>
+                <p>Finding adventure spots...</p>
+            </div>
+            
+            <div id="location-options" class="location-options">
+                <!-- Location options will be loaded here -->
+            </div>
+            
+            <div id="location-error" class="error-message" style="display: none;"></div>
         </div>
     </div>
 

@@ -152,8 +152,15 @@
 .dog-breed {
     color: #999;
     font-size: 1em;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     font-style: italic;
+}
+
+.adventure-location {
+    color: #667eea;
+    font-size: 0.95em;
+    margin-bottom: 15px;
+    font-weight: 600;
 }
 
 .adventure-preview {
@@ -275,7 +282,14 @@
     color: #999;
     font-size: 1.1em;
     font-style: italic;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+}
+
+.modal-location {
+    color: #667eea;
+    font-size: 1.05em;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .modal-date {
