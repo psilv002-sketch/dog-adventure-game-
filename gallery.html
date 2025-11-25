@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Gallery - Dog Companion Adventures</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="gallery-styles.css">
+</head>
+<body>
+    <div class="gallery-container">
+        <header class="gallery-header">
+            <h1>🐕 Adventure Gallery</h1>
+            <p class="gallery-subtitle">Discover amazing adventures from dogs around the world!</p>
+            <a href="index.html" class="btn-secondary">Create Your Own Adventure</a>
+        </header>
+
+        <div id="loading" class="loading-container">
+            <div class="spinner"></div>
+            <p>Loading adventures...</p>
+        </div>
+
+        <div id="error-message" class="error-container" style="display: none;">
+            <p>⚠️ Failed to load adventures. Please try again later.</p>
+        </div>
+
+        <div id="adventures-grid" class="adventures-grid">
+            <!-- Adventures will be loaded here dynamically -->
+        </div>
+
+        <div id="no-adventures" class="no-adventures" style="display: none;">
+            <p>🌟 No adventures yet! Be the first to share one!</p>
+            <a href="index.html" class="btn-primary">Start an Adventure</a>
+        </div>
+    </div>
+
+    <!-- Modal for viewing full adventure -->
+    <div id="adventure-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modal-body">
+                <!-- Full adventure details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="gallery.js"></script>
+</body>
+</html>
+

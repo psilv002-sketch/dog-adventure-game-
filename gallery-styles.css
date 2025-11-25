@@ -1,0 +1,376 @@
+/* Gallery Page Styles */
+
+.gallery-container {
+    min-height: 100vh;
+    padding: 40px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.gallery-header {
+    text-align: center;
+    margin-bottom: 50px;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-header h1 {
+    color: #667eea;
+    font-size: 3em;
+    margin-bottom: 15px;
+    font-family: 'Fredoka One', 'Comic Sans MS', cursive;
+}
+
+.gallery-subtitle {
+    font-size: 1.3em;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.gallery-header .btn-secondary {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+/* Loading State */
+.loading-container {
+    text-align: center;
+    padding: 80px 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.loading-container p {
+    color: #667eea;
+    font-size: 1.2em;
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+/* Error State */
+.error-container {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f8d7da;
+    border: 2px solid #dc3545;
+    border-radius: 20px;
+    color: #721c24;
+    font-size: 1.2em;
+}
+
+/* No Adventures State */
+.no-adventures {
+    text-align: center;
+    padding: 80px 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.no-adventures p {
+    font-size: 1.5em;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Adventures Grid */
+.adventures-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* Adventure Card */
+.adventure-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.adventure-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.card-photo {
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.dog-photo-card {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-content {
+    padding: 25px;
+}
+
+.dog-name {
+    font-size: 1.8em;
+    color: #667eea;
+    margin-bottom: 8px;
+    font-family: 'Fredoka One', 'Comic Sans MS', cursive;
+}
+
+.dog-breed {
+    color: #999;
+    font-size: 1em;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.adventure-preview {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    min-height: 80px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.chapter-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.date {
+    color: #999;
+    font-size: 0.9em;
+}
+
+.btn-read {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-read:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-modal:hover {
+    color: #667eea;
+}
+
+.modal-header {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.modal-dog-photo img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #667eea;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-dog-info h2 {
+    color: #667eea;
+    font-size: 2.2em;
+    margin-bottom: 10px;
+    font-family: 'Fredoka One', 'Comic Sans MS', cursive;
+}
+
+.modal-breed {
+    color: #999;
+    font-size: 1.1em;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+.modal-date {
+    color: #666;
+    font-size: 0.95em;
+}
+
+.modal-chapters {
+    margin-top: 30px;
+}
+
+.modal-chapter {
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    border-left: 5px solid #667eea;
+}
+
+.modal-chapter h3 {
+    color: #667eea;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    font-family: 'Fredoka One', 'Comic Sans MS', cursive;
+}
+
+.modal-chapter-story {
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.modal-chapter-choice {
+    background: #f0f4ff;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    margin-top: 12px;
+    font-size: 0.95em;
+    color: #555;
+}
+
+.modal-chapter-choice strong {
+    color: #667eea;
+}
+
+/* Share Status Styles */
+.share-status {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.share-status.success {
+    background: #d4edda;
+    color: #155724;
+    border: 2px solid #28a745;
+}
+
+.share-status.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 2px solid #dc3545;
+}
+
+.summary-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.summary-actions .btn-primary,
+.summary-actions .btn-secondary {
+    flex: 1;
+    min-width: 200px;
+    max-width: 250px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .adventures-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .gallery-header h1 {
+        font-size: 2em;
+    }
+    
+    .modal-content {
+        padding: 30px 20px;
+    }
+    
+    .modal-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .close-modal {
+        top: 10px;
+        right: 15px;
+        font-size: 30px;
+    }
+    
+    .summary-actions {
+        flex-direction: column;
+    }
+    
+    .summary-actions .btn-primary,
+    .summary-actions .btn-secondary {
+        max-width: 100%;
+    }
+}
+

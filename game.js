@@ -771,11 +771,85 @@ function showAdventureSummary() {
                 <p><strong>Total Chapters:</strong> ${chapterCount}</p>
                 <p><strong>Decisions Made:</strong> ${decisionCount}</p>
             </div>
-            <button class="btn-primary" onclick="location.reload()">Start New Adventure</button>
+            <div class="summary-actions">
+                <button class="btn-primary" id="share-to-gallery-btn">📚 Share to Gallery</button>
+                <button class="btn-secondary" onclick="location.reload()">Start New Adventure</button>
+            </div>
+            <div id="share-status" class="share-status" style="display: none;"></div>
         </div>
     `;
     
     storyContent.innerHTML = summaryHTML;
+    
+    // Add event listener for share button
+    document.getElementById('share-to-gallery-btn').addEventListener('click', shareToGallery);
+}
+
+// Share adventure to gallery
+async function shareToGallery() {
+    const shareBtn = document.getElementById('share-to-gallery-btn');
+    const shareStatus = document.getElementById('share-status');
+    
+    // Disable button
+    shareBtn.disabled = true;
+    shareBtn.textContent = '📤 Sharing...';
+    
+    try {
+        // Determine API endpoint
+        const apiEndpoint = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8888/.netlify/functions/save-adventure'
+            : '/.netlify/functions/save-adventure';
+        
+        // Prepare adventure data
+        const adventureData = {
+            dogName: dogData.name,
+            dogBreed: dogData.breed,
+            dogGender: dogData.gender,
+            dogPhoto: dogData.photo,
+            chapters: storyHistory.map((entry, index) => ({
+                number: index + 1,
+                story: entry.storyText,
+                choice: entry.choiceMade || null
+            }))
+        };
+        
+        const response = await fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(adventureData)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to share adventure');
+        }
+        
+        const data = await response.json();
+        
+        // Show success message
+        shareStatus.style.display = 'block';
+        shareStatus.className = 'share-status success';
+        shareStatus.innerHTML = `
+            ✅ Adventure shared successfully!
+            <a href="gallery.html" style="color: #667eea; text-decoration: underline; margin-left: 10px;">View Gallery</a>
+        `;
+        
+        shareBtn.textContent = '✓ Shared!';
+        shareBtn.style.background = '#28a745';
+        
+    } catch (error) {
+        console.error('Error sharing adventure:', error);
+        
+        // Show error message
+        shareStatus.style.display = 'block';
+        shareStatus.className = 'share-status error';
+        shareStatus.textContent = '❌ Failed to share adventure. Please try again.';
+        
+        // Re-enable button
+        shareBtn.disabled = false;
+        shareBtn.textContent = '📚 Share to Gallery';
+    }
 }
 
 function updateStats() {

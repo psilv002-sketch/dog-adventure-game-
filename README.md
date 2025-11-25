@@ -10,6 +10,8 @@ An AI-powered interactive choose-your-own-adventure game where you upload a phot
 - **Dynamic Storytelling**: Every playthrough is different - the story adapts to your choices
 - **Personality-Based Adventures**: Your dog's traits influence the story direction and options
 - **Interactive Choices**: Make decisions that shape your dog's adventure
+- **5-Chapter Adventures**: Each adventure concludes after 5 engaging chapters
+- **Adventure Gallery**: Share your completed adventures and browse stories from dogs around the world!
 - **Beautiful UI**: Modern, playful design with animations
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 
@@ -52,6 +54,20 @@ Quick steps:
 - ✅ Free hosting (Netlify free tier)
 - ✅ Shareable link
 - ✅ Automatic HTTPS
+- ✅ Adventure Gallery enabled
+
+### Enable the Gallery Feature (Optional)
+
+Want users to share and view adventures? Set up the gallery!
+
+📖 **See [AIRTABLE_SETUP.md](AIRTABLE_SETUP.md) for step-by-step instructions!**
+
+Quick steps:
+1. Create free Airtable account
+2. Set up "Dog Adventures" base
+3. Get API key and Base ID
+4. Add to Netlify environment variables
+5. Gallery is live at `your-site.netlify.app/gallery.html`
 
 ### Option B: Run Locally
 
