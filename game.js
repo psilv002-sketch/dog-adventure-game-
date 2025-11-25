@@ -76,7 +76,7 @@ Instructions:
 1. Write an engaging, fun story about ${dogData.name}'s adventure
 2. Keep the story appropriate for all ages
 3. Make ${dogData.name}'s personality and favorite activity influence the story
-4. IMPORTANT: Keep each story segment SHORT - exactly 5-6 sentences maximum
+4. IMPORTANT: Keep each story segment SUPER SHORT - exactly 2-3 sentences maximum
 5. Write concisely and get to the point quickly
 6. Always end with exactly 2 choices for what ${dogData.name} does next
 7. Format choices as: "CHOICE 1: [description]", "CHOICE 2: [description]"
@@ -211,7 +211,7 @@ function selectLocation(location) {
 // Generate the initial story
 async function generateInitialStory() {
     const systemPrompt = buildSystemPrompt();
-    const userPrompt = `Start ${dogData.name}'s adventure at ${selectedLocation}! Begin the story with ${dogData.name} arriving at this location. Reflect ${dogData.name}'s ${dogData.personality.join(' and ')} personality. Keep it SHORT - write exactly 5-6 sentences, then provide 2 choices for what ${dogData.name} does first.`;
+    const userPrompt = `Start ${dogData.name}'s adventure at ${selectedLocation}! Begin the story with ${dogData.name} arriving at this location. Reflect ${dogData.name}'s ${dogData.personality.join(' and ')} personality. Keep it SUPER SHORT - write exactly 2-3 sentences, then provide 2 choices for what ${dogData.name} does first.`;
     
     const messages = [
         { role: 'system', content: systemPrompt },
@@ -239,9 +239,9 @@ async function continueStory(choice, isFinalChapter = false) {
     
     // Add current choice
     if (isFinalChapter) {
-        messages.push({ role: 'user', content: `${dogData.name} chooses: ${choice}. This is the FINAL chapter. Write a satisfying conclusion to ${dogData.name}'s adventure. Keep it SHORT - exactly 5-6 sentences maximum. End the story on a positive, uplifting note. DO NOT provide any choices - just end the story.` });
+        messages.push({ role: 'user', content: `${dogData.name} chooses: ${choice}. This is the FINAL chapter. Write a satisfying conclusion to ${dogData.name}'s adventure. Keep it SUPER SHORT - exactly 2-3 sentences. End the story on a positive, uplifting note. DO NOT provide any choices - just end the story.` });
     } else {
-        messages.push({ role: 'user', content: `${dogData.name} chooses: ${choice}. Continue the adventure with what happens next. Keep it SHORT - exactly 5-6 sentences maximum, then provide 2 new choices.` });
+        messages.push({ role: 'user', content: `${dogData.name} chooses: ${choice}. Continue the adventure with what happens next. Keep it SUPER SHORT - exactly 2-3 sentences, then provide 2 new choices.` });
     }
     
     const response = await callOpenAI(messages);
@@ -622,7 +622,54 @@ function updateCanvas() {
 
 function getEditedPhoto() {
     // Return edited photo if available, otherwise return original
+    // This is used for display - keep full quality
     return editedDogPhoto || dogPhoto;
+}
+
+// Compress image to reduce file size for storage in Airtable
+async function compressImageForStorage(dataUrl) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+            // Set max dimensions (reduce resolution for storage)
+            const maxWidth = 400;
+            const maxHeight = 400;
+            
+            let width = img.width;
+            let height = img.height;
+            
+            // Calculate new dimensions maintaining aspect ratio
+            if (width > maxWidth || height > maxHeight) {
+                if (width > height) {
+                    height = (height * maxWidth) / width;
+                    width = maxWidth;
+                } else {
+                    width = (width * maxHeight) / height;
+                    height = maxHeight;
+                }
+            }
+            
+            // Create canvas and draw compressed image
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            
+            // Draw image with smoothing for better quality at smaller size
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Convert to base64 with reduced quality (0.75 = 75% quality for good balance)
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+            resolve(compressedDataUrl);
+        };
+        img.onerror = () => {
+            // If compression fails, return original
+            resolve(dataUrl);
+        };
+        img.src = dataUrl;
+    });
 }
 
 function handleQuestionnaireSubmit(e) {
@@ -973,18 +1020,30 @@ async function shareToGallery() {
     shareBtn.textContent = '📤 Sharing...';
     
     try {
+        // Compress photo before saving to reduce size
+        shareStatus.style.display = 'block';
+        shareStatus.className = 'share-status';
+        shareStatus.style.background = '#fff3cd';
+        shareStatus.style.color = '#856404';
+        shareStatus.style.border = '2px solid #ffc107';
+        shareStatus.textContent = '⏳ Compressing photo...';
+        
+        const compressedPhoto = await compressImageForStorage(dogData.photo);
+        
+        shareStatus.textContent = '📤 Uploading adventure...';
+        
         // Determine API endpoint
         const apiEndpoint = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:8888/.netlify/functions/save-adventure'
             : '/.netlify/functions/save-adventure';
         
-        // Prepare adventure data
+        // Prepare adventure data with compressed photo
         const adventureData = {
             dogName: dogData.name,
             dogBreed: dogData.personality.join(', '),
             dogGender: dogData.gender,
             dogLocation: selectedLocation,
-            dogPhoto: dogData.photo,
+            dogPhoto: compressedPhoto,
             chapters: storyHistory.map((entry, index) => ({
                 number: index + 1,
                 story: entry.storyText,

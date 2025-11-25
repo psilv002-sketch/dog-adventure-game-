@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
         const { dogName, dogBreed, dogGender, dogLocation, dogPhoto, chapters } = JSON.parse(event.body);
 
         // Prepare data for Airtable
-        // Note: Skip photo if it's too large (base64 images can exceed Airtable's limits)
+        // Photos are now compressed on client-side before sending
         const fields = {
             'Dog Name': dogName,
             'Breed': dogBreed,
@@ -37,12 +37,15 @@ exports.handler = async (event, context) => {
             'Chapter Count': chapters.length
         };
         
-        // Only include photo if it's not too large (Airtable free tier has 100k char limit)
-        if (dogPhoto && dogPhoto.length < 90000) {
-            fields['Photo URL'] = dogPhoto;
-        } else {
-            // Store a placeholder or skip
-            fields['Photo URL'] = 'Photo too large for storage';
+        // Include photo if provided (should be compressed and under size limit)
+        if (dogPhoto && dogPhoto.length > 0) {
+            // Compressed photos should be under 50k characters, but allow up to 80k to be safe
+            if (dogPhoto.length < 80000) {
+                fields['Photo URL'] = dogPhoto;
+            } else {
+                // If somehow still too large, skip it
+                console.warn('Photo still too large after compression, skipping');
+            }
         }
         
         const airtableData = {
