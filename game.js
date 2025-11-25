@@ -6,7 +6,7 @@ let editedDogPhoto = null; // Store edited/cropped photo
 let storyHistory = []; // Store the story progression
 let chapterCount = 1;
 let decisionCount = 0;
-const MAX_CHAPTERS = 3; // Adventure ends after 3 chapters
+const MAX_CHAPTERS = 2; // Adventure ends after 2 chapters
 
 // Image editing state
 let imageEditor = {
@@ -750,7 +750,7 @@ function showAdventureSummary() {
     let summaryHTML = `
         <div class="adventure-summary">
             <h2>🎉 Adventure Complete! 🎉</h2>
-            <p class="summary-intro">${dogData.name}'s amazing ${MAX_CHAPTERS}-chapter journey</p>
+            <p class="summary-intro">${dogData.name}'s quick adventure</p>
             <div class="summary-chapters">
     `;
     
