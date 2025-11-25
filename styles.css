@@ -250,6 +250,35 @@ h1 {
     padding: 12px 30px;
 }
 
+/* Gallery Link on Welcome Screen */
+.gallery-link-container {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.gallery-link {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #f0f0f0;
+    color: #667eea;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid #e0e0e0;
+}
+
+.gallery-link:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
 .dog-photo-display {
     text-align: center;
     margin-bottom: 30px;
