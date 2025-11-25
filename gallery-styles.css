@@ -119,6 +119,25 @@
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
+.dog-photo-placeholder {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    border: 5px solid white;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dog-photo-placeholder.modal {
+    width: 150px;
+    height: 150px;
+    font-size: 60px;
+}
+
 .card-content {
     padding: 25px;
 }

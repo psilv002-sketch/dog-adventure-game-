@@ -71,9 +71,18 @@ function createAdventureCard(adventure) {
     const firstChapter = adventure.chapters[0];
     const preview = firstChapter ? firstChapter.story.substring(0, 150) + '...' : 'No preview available';
 
+    // Check if photo is available and valid
+    const hasValidPhoto = adventure.photoUrl && 
+                          adventure.photoUrl.startsWith('data:image') && 
+                          adventure.photoUrl.length > 100;
+    
+    const photoHTML = hasValidPhoto 
+        ? `<img src="${adventure.photoUrl}" alt="${adventure.dogName}" class="dog-photo-card">`
+        : `<div class="dog-photo-placeholder">🐕</div>`;
+    
     card.innerHTML = `
         <div class="card-photo">
-            <img src="${adventure.photoUrl}" alt="${adventure.dogName}" class="dog-photo-card">
+            ${photoHTML}
         </div>
         <div class="card-content">
             <h3 class="dog-name">${adventure.dogName}</h3>
@@ -117,10 +126,19 @@ function showFullAdventure(adventure) {
         `;
     });
 
+    // Check if photo is available and valid
+    const hasValidPhoto = adventure.photoUrl && 
+                          adventure.photoUrl.startsWith('data:image') && 
+                          adventure.photoUrl.length > 100;
+    
+    const modalPhotoHTML = hasValidPhoto 
+        ? `<img src="${adventure.photoUrl}" alt="${adventure.dogName}" class="dog-photo-modal">`
+        : `<div class="dog-photo-placeholder modal">🐕</div>`;
+    
     modalBody.innerHTML = `
         <div class="modal-header">
             <div class="modal-dog-photo">
-                <img src="${adventure.photoUrl}" alt="${adventure.dogName}" class="dog-photo-modal">
+                ${modalPhotoHTML}
             </div>
             <div class="modal-dog-info">
                 <h2>${adventure.dogName}'s Adventure</h2>
